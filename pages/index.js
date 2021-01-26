@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 import db from '../db.json';
 import Widget from '../src/components/Widget';
@@ -27,27 +29,51 @@ export const QuizContainer = styled.div`
 `;
 
 export default function Home() {
+  const router = useRouter();
+
+  const [name, setName] = useState('');
+
   return (
-    <QuizBackground backgroundImage={db.bg} >
+    <QuizBackground backgroundImage={db.bg}>
       <QuizContainer>
         <Widget>
           <Widget.Header>
             <h1>Título</h1>
           </Widget.Header>
           <Widget.Content>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci dicta rem eius mollitia voluptate laudantium eveniet maxime rerum cupiditate odio at distinctio natus vero ea, corporis praesentium incidunt quo quam?</p>
+            <form onSubmit={(evt) => {
+              evt.preventDefault();
+              router.push(`/quiz?name=${name}`);
+            }}>
+              <input
+                type="text"
+                placeholder="Preencha com seu nome"
+                onChange={(e) => setName(e.target.value)}
+              />
+              <button
+                type="submit"
+                disabled={name.length === 0}
+              >
+                {`Jogar ${name}`}
+              </button>
+            </form>
           </Widget.Content>
         </Widget>
         <Widget>
           <Widget.Content>
             <h1>Quizes da Galera</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci dicta rem eius mollitia voluptate laudantium eveniet maxime rerum cupiditate odio at distinctio natus vero ea, corporis praesentium incidunt quo quam?</p>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Adipisci dicta rem eius mollitia voluptate laudantium
+              eveniet maxime rerum cupiditate odio at distinctio natus
+              vero ea, corporis praesentium incidunt quo quam?
+            </p>
           </Widget.Content>
         </Widget>
 
         <Footer />
       </QuizContainer>
-      <GitHubCorner projectUrl='https://github.com/LucBonnet' />
+      <GitHubCorner projectUrl="https://github.com/LucBonnet" />
     </QuizBackground>
   );
 }
