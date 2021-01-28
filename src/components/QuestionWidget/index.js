@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Widget from '../Widget';
 import Button from '../Button';
+import AlternativeForm from '../AlternativeForm';
 
-export default function QuestionWidget({ question, totalQuestions,  questionIndex, onSubmit }) {
+export default function QuestionWidget({ question, totalQuestions,  questionIndex, onSubmit, addResults }) {
   const questionId = `question__${questionIndex}`
   const [selectedAlternative, setSelectAlternative] = useState(undefined);
   const [isQuestionSubmited, setIsQuestionSubmited] = useState(false);
@@ -34,10 +35,11 @@ export default function QuestionWidget({ question, totalQuestions,  questionInde
           {question.description}
         </p>
 
-        <form onSubmit={(evt) => {
+        <AlternativeForm onSubmit={(evt) => {
           evt.preventDefault();
           setIsQuestionSubmited(true);
           setTimeout(() => {
+            addResults(isCorrect);
             onSubmit();
             setIsQuestionSubmited(false);
             setSelectAlternative(undefined);
@@ -45,13 +47,18 @@ export default function QuestionWidget({ question, totalQuestions,  questionInde
         }}>
           {question.alternatives.map((alternative, alternativeIndex) => {
             const alternativeId = `alternative__${alternativeIndex}`;
+            const AlternativeStatus = isCorrect ? 'SUCCESS' : 'ERROR';
+            const isSelected = selectedAlternative === alternativeIndex;
             return (
               <Widget.Topic 
                 key={alternativeIndex}
                 as='label'
                 htmlFor={alternativeId}
+                data-selected={isSelected}
+                data-status={isQuestionSubmited && AlternativeStatus}
               >
                 <input 
+                  style={{ display: 'none' }}
                   id={alternativeId}
                   type='radio'
                   onChange={() => setSelectAlternative(alternativeIndex)}
@@ -67,7 +74,7 @@ export default function QuestionWidget({ question, totalQuestions,  questionInde
 
           {isQuestionSubmited && isCorrect && <p>Você Acertou!</p>}
           {isQuestionSubmited && !isCorrect && <p>Você Errou!</p>}
-        </form>
+        </AlternativeForm>
       </Widget.Content>
     </Widget>
   );

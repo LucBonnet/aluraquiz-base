@@ -13,6 +13,35 @@ import QuestionWidget from '../src/components/QuestionWidget';
 import Button from '../src/components/Button';
 import QuizLogo from '../src/components/QuizLogo';
 
+function ResultWidget({ results, name }){
+  return (
+    <Widget>
+      <Widget.Header>
+        <h3>
+          Tela de Resultados
+        </h3>
+      </Widget.Header>
+      <Widget.Content>
+        <p>{`Parabéns ${name} `}</p>
+        <p>Você acertou {results.reduce((somatoriaAtual, resultAtual) => {
+          if(resultAtual) {
+            return somatoriaAtual + 1;
+          }
+          return somatoriaAtual;
+        }, 0)} perguntas</p>
+        <ul>
+          {results.map((result, index) => (
+            <li key={`result__${index}`}>
+              {`#${(index+1).toString().padStart(2, '0')} Resultado: `}
+              {result ? 'Acertou' : 'Errou'}
+            </li>
+          ))}
+        </ul>
+      </Widget.Content>
+    </Widget>
+  );
+}
+
 function LoadingWidget() {
   return (
     <Widget>
@@ -37,7 +66,7 @@ function LoadingWidget() {
           
         </p>
 
-        <Button>
+        <Button type='button'>
           Confirmar
         </Button>
       </Widget.Content>
@@ -58,8 +87,16 @@ export default function QuizPage() {
   const [screenState, setScreenState] = useState(screenStates.LOADING);
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [results, setResults] = useState([]);
   const question = db.questions[currentQuestion];
   const totalQuestions = db.questions.length;
+
+  function addResults(result) {
+    setResults([
+      ...results,
+      result,
+    ])
+  }
 
   useEffect(() => {
     function changeState() {
@@ -67,7 +104,11 @@ export default function QuizPage() {
     }
 
     // fectch
-    setTimeout(changeState, 1 * 1000);
+    setTimeout(changeState, 1 * 1000); 
+
+    return () => {
+      clearTimeout(changeState);
+    }
   }, []);
 
   function handleSubmitQuiz() {
@@ -89,6 +130,7 @@ export default function QuizPage() {
             questionIndex={currentQuestion}
             totalQuestions={totalQuestions}
             onSubmit={handleSubmitQuiz}
+            addResults={addResults}
           />
         )}
 
@@ -97,9 +139,7 @@ export default function QuizPage() {
         )}
 
         {screenState === screenStates.RESULT && (
-          <div>
-            Você acertou X questões
-          </div>
+          <ResultWidget results={results} name={name}/>
         )}
         <Footer />
       </QuizContainer>
