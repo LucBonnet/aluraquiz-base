@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Widget from '../Widget';
 import Button from '../Button';
 import AlternativeForm from '../AlternativeForm';
+import BackLinkArrow from '../BackLinkArrow';
 
 export default function QuestionWidget({ question, totalQuestions,  questionIndex, onSubmit, addResults }) {
   const questionId = `question__${questionIndex}`
@@ -14,6 +15,7 @@ export default function QuestionWidget({ question, totalQuestions,  questionInde
   return (
     <Widget>
       <Widget.Header>
+        <BackLinkArrow href="/" />
         <h3>
           {`Pergunta ${questionIndex+1} de ${totalQuestions}`}
         </h3>
@@ -58,7 +60,6 @@ export default function QuestionWidget({ question, totalQuestions,  questionInde
                 data-status={isQuestionSubmited && AlternativeStatus}
               >
                 <input 
-                  style={{ display: 'none' }}
                   id={alternativeId}
                   type='radio'
                   onChange={() => setSelectAlternative(alternativeIndex)}

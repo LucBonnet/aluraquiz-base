@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
-import db from '../db.json';
+import db from '../../db.json';
 
-import Widget from '../src/components/Widget';
-import Footer from '../src/components/Footer';
-import GitHubCorner from '../src/components/GitHubCorner';
-import QuizBackground from '../src/components/QuizBackground';
-import QuizContainer from '../src/components/QuizContainer';
-import QuestionWidget from '../src/components/QuestionWidget';
-import Button from '../src/components/Button';
-import QuizLogo from '../src/components/QuizLogo';
+import Widget from '../../src/components/Widget';
+import Footer from '../../src/components/Footer';
+import GitHubCorner from '../../src/components/GitHubCorner';
+import QuizBackground from '../../src/components/QuizBackground';
+import QuizContainer from '../../src/components/QuizContainer';
+import QuestionWidget from '../../src/components/QuestionWidget';
+import Button from '../../src/components/Button';
+import QuizLogo from '../../src/components/QuizLogo';
 
 function ResultWidget({ results, name }){
   return (

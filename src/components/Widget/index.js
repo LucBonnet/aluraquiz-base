@@ -62,6 +62,10 @@ Widget.Topic = styled.a`
   border-radius: ${({ theme }) => theme.borderRadius};
   transition: .3s;
   display: block;
+
+  > input {
+    display: none;
+  }
   
   &:hover,
   &:focus {
